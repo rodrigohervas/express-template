@@ -3,6 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
+const bodyParser = require('body-parser')
 const { NODE_ENV } = require('./config')
 const logger = require('./logger')
 
@@ -13,28 +14,6 @@ app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
 app.use(bodyParser.json())
-
-
-//DB CONNECTION
-mongoose.connect(
-    process.env.MONGODB_URI,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => {
-        console.log("Connection to DB established.")
-    })
-    .catch(error => {
-        connectionErrorHandler(error)
-    })
-
-mongoose.connection.on('error', error => connectionErrorHandler(error))
-
-function connectionErrorHandler(error) {
-    console.log('Error: ', error.message)
-}
-
 
 
 //SECURITY HANDLE MIDDLEWARE
